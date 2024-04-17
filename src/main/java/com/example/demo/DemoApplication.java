@@ -5,12 +5,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.example.CalendarPanel;
+
 import javax.swing.*;
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 @SpringBootApplication
 public class DemoApplication implements DarkModeListener {
@@ -62,7 +62,7 @@ public class DemoApplication implements DarkModeListener {
             button1.addActionListener(e -> switchContent(frame, "Content1.java"));
             button2.addActionListener(e -> switchContent(frame, "Content2.java"));
             button3.addActionListener(e -> switchContent(frame, "Content3.java"));
-            button4.addActionListener(e -> switchContent(frame, "Content4.java"));
+            button4.addActionListener(e -> openCalendar(frame));
             button5.addActionListener(e -> openSettingsDialog(frame));
 
             // Add buttons to the sidebar panel
@@ -101,15 +101,84 @@ public class DemoApplication implements DarkModeListener {
         contentPanel.removeAll();
         contentPanel.revalidate();
         contentPanel.repaint();
-
+    
         // Create a new instance of SettingsDialog and pass the current dark mode state
         SettingsDialog settingsDialog = new SettingsDialog(currentDarkModeState, this);
         contentPanel.add(settingsDialog, BorderLayout.CENTER);
+    
+        // Apply dark/light mode colors to the settings dialog, top panel, and calendar
+       
     }
+    
+    private void openCalendar(JFrame parent) {
+        // Clear existing content
+        contentPanel.removeAll();
+        contentPanel.revalidate();
+    
+        // Create a new instance of CalendarPanel
+        CalendarPanel calendarPanel = new CalendarPanel();
+        contentPanel.add(calendarPanel, BorderLayout.CENTER);
+    
+        // Apply dark/light mode colors to the calendar panel, top panel, and sidebar
+    
+    }
+    
+    
+    // Method to apply dark mode colors to the components
+    
+    
+    // Method to apply light mode colors to the components
+   
+    
 
-    @Override
-    public void darkModeToggled(boolean darkModeEnabled) {
-        currentDarkModeState = darkModeEnabled;
-        contentPanel.setBackground(darkModeEnabled ? Color.DARK_GRAY : Color.WHITE);
+    // Method to apply dark mode colors to the components
+   
+
+    // Method to apply light mode colors to the components
+ 
+    private void applyDarkModeColors(Component... components) {
+        for (Component component : components) {
+            if (component instanceof JComponent) {
+                JComponent jComponent = (JComponent) component;
+                jComponent.setBackground(Color.DARK_GRAY);
+                jComponent.setForeground(Color.WHITE);
+            }
+        }
+        // Apply dark mode color to top panel
+        if (sidebarPanel != null) {
+            sidebarPanel.setBackground(Color.DARK_GRAY);
+        }
+        // Apply dark mode color to sidebar
+        if (contentPanel != null) {
+            contentPanel.setBackground(Color.DARK_GRAY);
+        }
     }
+    
+    // Method to apply light mode colors to the components
+    private void applyLightModeColors(Component... components) {
+        for (Component component : components) {
+            if (component instanceof JComponent) {
+                JComponent jComponent = (JComponent) component;
+                jComponent.setBackground(Color.WHITE);
+                jComponent.setForeground(Color.BLACK);
+            }
+        }
+        // Apply light mode color to top panel
+        if (sidebarPanel != null) {
+            sidebarPanel.setBackground(Color.WHITE);
+        }
+        // Apply light mode color to sidebar
+        if (contentPanel != null) {
+            contentPanel.setBackground(Color.WHITE);
+        }
+    }
+    @Override
+public void darkModeToggled(boolean darkModeEnabled) {
+    currentDarkModeState = darkModeEnabled;
+    if (darkModeEnabled) {
+        applyDarkModeColors(sidebarPanel, contentPanel);
+    } else {
+        applyLightModeColors(sidebarPanel, contentPanel);
+    }
+}
 }
