@@ -1,8 +1,6 @@
-package com.example;
+package com.example.demo;
 
 import javax.swing.*;
-
-import com.example.demo.DarkModeListener;
 
 import java.awt.*;
 import java.time.YearMonth;
