@@ -52,10 +52,10 @@ public class DemoApplication implements DarkModeListener {
             sidebarPanel.setPreferredSize(new Dimension(200, frame.getHeight()));
 
             // Add buttons to the sidebar
-            JButton button1 = new JButton("Button 1");
-            JButton button2 = new JButton("Button 2");
-            JButton button3 = new JButton("Button 3");
-            JButton button4 = new JButton("Button 4");
+            JButton button1 = new JButton("HomePage");
+            JButton button2 = new JButton("Trabalhos");
+            JButton button3 = new JButton("Chat");
+            JButton button4 = new JButton("Calendario");
             JButton button5 = new JButton("Definições");
 
             // Add action listeners to the buttons
