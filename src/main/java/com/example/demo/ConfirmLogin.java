@@ -11,7 +11,7 @@ public class ConfirmLogin {
         int userId = -1; // Initialize with a default value
         
         // SQL query to check if the username and password match
-        String query = "SELECT ID FROM utilizadores WHERE nome = ? AND Password = ?";
+        String query = "SELECT ID FROM utilizadores WHERE nome = ? AND Password = SHA1(?)";
         
         // Establish a database connection
         try (Connection connection = new DatabaseConnection().getConnection();

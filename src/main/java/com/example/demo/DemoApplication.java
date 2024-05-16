@@ -32,14 +32,14 @@ public class DemoApplication implements DarkModeListener {
         SpringApplication.run(DemoApplication.class, args);
     }
 
-    @Autowired
-    private int userId;
+    @Autowired int userId;
     private JFrame loginFrame;
 
     public DemoApplication(int userId, JFrame loginFrame) {
         this.userId = userId;
         this.loginFrame = loginFrame;
     }
+  
     
     public void startMainProgram() {
         // Implement the main program logic here

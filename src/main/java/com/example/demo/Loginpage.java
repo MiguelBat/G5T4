@@ -15,6 +15,7 @@ public class LoginPage extends JPanel {
         usernameField = new JTextField(20);
         passwordField = new JPasswordField(20);
         JButton loginButton = new JButton("Login");
+        JButton createAccountButton = new JButton("Create Account"); // Add create account button
 
         // Add action listener to the login button
         loginButton.addActionListener(new ActionListener() {
@@ -39,14 +40,28 @@ public class LoginPage extends JPanel {
             }
         });
 
+        // Add action listener to the create account button
+        createAccountButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Switch to the create account page
+                JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(LoginPage.this);
+                frame.getContentPane().removeAll();
+                frame.getContentPane().add(new CreateAccountPage());
+                frame.revalidate();
+                frame.repaint();
+            }
+        });
+
         // Add components to the panel
-        setLayout(new GridLayout(3, 2));
+        setLayout(new GridLayout(4, 2)); // Increase grid rows to accommodate the new button
         add(new JLabel("Username:"));
         add(usernameField);
         add(new JLabel("Password:"));
         add(passwordField);
         add(new JPanel()); // Empty panel for spacing
         add(loginButton);
+        add(createAccountButton); // Add the create account button
     }
 
     // Method to move to the main program with the user ID
