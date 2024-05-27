@@ -8,19 +8,18 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import java.sql.Connection;
-import java.sql.SQLException;
-import com.example.demo.EditDayDialog;
 
 public class CalendarPanel extends JPanel {
 
-    
-
     private YearMonth currentYearMonth;
+    private int userId;
 
 
-    
-    public CalendarPanel() {
+   
+
+    // Constructor with userId parameter
+    public CalendarPanel(int userId) {
+        this.userId = userId;
         currentYearMonth = YearMonth.now();
         setLayout(new BorderLayout());
         displayCalendar(currentYearMonth);
@@ -53,20 +52,25 @@ public class CalendarPanel extends JPanel {
         for (String day : daysOfWeek) {
             daysPanel.add(new JLabel(day, SwingConstants.CENTER));
         }
-        int firstDayOfMonth = yearMonth.atDay(1).getDayOfWeek().getValue();
+        int firstDayOfMonth = yearMonth.atDay(1).getDayOfWeek().getValue() % 7;
         for (int i = 0; i < firstDayOfMonth; i++) {
             daysPanel.add(new JLabel());
         }
         int daysInMonth = yearMonth.lengthOfMonth();
         for (int day = 1; day <= daysInMonth; day++) {
+            LocalDate currentDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), day);
             JButton dayButton = new JButton(Integer.toString(day));
-            int finalDay = day;
+            List<String> events = getEventsForDay(currentDate);
+            if (!events.isEmpty()) {
+                dayButton.setBackground(Color.YELLOW);
+            } else {
+                dayButton.setBackground(Color.GREEN);
+            }
             dayButton.addActionListener(e -> {
-                LocalDate selectedDate = LocalDate.of(yearMonth.getYear(), yearMonth.getMonth(), finalDay);
-                List<String> events = getEventsForDay(selectedDate);
-                if (!events.isEmpty()) {
-                    StringBuilder message = new StringBuilder("Events for " + selectedDate + ":\n");
-                    for (String event : events) {
+                List<String> dayEvents = getEventsForDay(currentDate);
+                if (!dayEvents.isEmpty()) {
+                    StringBuilder message = new StringBuilder("Events for " + currentDate + ":\n");
+                    for (String event : dayEvents) {
                         message.append("- ").append(event).append("\n");
                     }
                     JOptionPane.showMessageDialog(this, message.toString());
@@ -74,7 +78,7 @@ public class CalendarPanel extends JPanel {
                     int choice = JOptionPane.showConfirmDialog(this, "Nothing on this day. Do you want to add an event?");
                     if (choice == JOptionPane.YES_OPTION) {
                         // Open edit day dialog
-                        openEditDayDialog(selectedDate);
+                        openEditDayDialog(currentDate);
                     }
                 }
             });
@@ -98,9 +102,10 @@ public class CalendarPanel extends JPanel {
     private List<String> getEventsForDay(LocalDate date) {
         List<String> events = new ArrayList<>();
         try (Connection connection = new DatabaseConnection().getConnection()) {
-            String query = "SELECT Titulo FROM calendario WHERE Data = ?";
+            String query = "SELECT Titulo FROM calendario WHERE IDutilizador = ? AND ? BETWEEN Data AND datafim";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setDate(1, Date.valueOf(date));
+                statement.setInt(1, userId);
+                statement.setDate(2, Date.valueOf(date));
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         events.add(resultSet.getString("Titulo"));
@@ -112,42 +117,33 @@ public class CalendarPanel extends JPanel {
         }
         return events;
     }
-    
-    private boolean insertEvent(LocalDate date, String title, String details) {
-        try (Connection connection = new DatabaseConnection().getConnection()) {
-            String query = "INSERT INTO calendario (Data, Datacriada, Titulo, Detalhes) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setDate(1, Date.valueOf(date));
-                statement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
-                statement.setString(3, title);
-                statement.setString(4, details);
-                int rowsAffected = statement.executeUpdate();
-                return rowsAffected > 0;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
+           
+            int userId = getUserIdFromDemoApplication();
             JFrame frame = new JFrame("Calendar");
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new CalendarPanel());
+            frame.getContentPane().add(new CalendarPanel(userId));
             frame.pack();
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
         });
     }
     
-    private void openEditDayDialog(LocalDate date) {
-        // Create and display the edit day dialog
-        
-        EditDayDialog editDayDialog = new EditDayDialog(date);
-        editDayDialog.setLocationRelativeTo(this); // Center the dialog relative to the calendar panel
-        editDayDialog.setVisible(true);
+    private int getUserIdFromDemoApplication() {
+        DemoApplication demoApp = DemoApplication.getInstance(userId); // Assuming getInstance() returns the instance
+        return demoApp.getUserId();
     }
+    
+
+    private void openEditDayDialog(LocalDate date) {
+        int userId = getUserIdFromDemoApplication();
+        EditDayDialog editDayDialog = new EditDayDialog(date, userId);
+        editDayDialog.setLocationRelativeTo(this); // Center the dialog relative to the calendar panel
+        editDayDialog.setVisible(true);     
+        System.out.println(userId);
+    }
+
 
 }

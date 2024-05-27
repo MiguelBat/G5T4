@@ -26,6 +26,7 @@ public class DemoApplication implements DarkModeListener {
     private JPanel sidebarPanel;
     private JPanel contentPanel;
     private boolean currentDarkModeState = false; // Initially set to false
+    private static DemoApplication instance;
     
    
     public static void main(String[] args) {
@@ -59,6 +60,32 @@ public class DemoApplication implements DarkModeListener {
     public DemoApplication(int userId) {
         this.userId = userId;
     }
+
+    public static DemoApplication getInstance(int userId) {
+        if (instance == null) {
+            System.out.println("Creating new DemoApplication instance...");
+            instance = new DemoApplication(userId);
+        } else {
+            System.out.println("Returning existing DemoApplication instance...");
+            instance.setUserId(userId); // Ensure userId is updated if instance already exists
+        }
+        return instance;
+    }
+    
+
+    // Setter method for userId
+    public void setUserId(int userId) {
+        this.userId = userId;
+        System.out.println("UserId set to: " + userId);
+    }
+
+    // Getter method for userId
+    public int getUserId() {
+        System.out.println("Returning userId: " + userId);
+        return userId;
+    }
+
+
 
     @Bean
     public ApplicationRunner applicationRunner() {
