@@ -118,18 +118,7 @@ public class CalendarPanel extends JPanel {
         return events;
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-           
-            int userId = getUserIdFromDemoApplication();
-            JFrame frame = new JFrame("Calendar");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.getContentPane().add(new CalendarPanel(userId));
-            frame.pack();
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
-        });
-    }
+   
     
     private int getUserIdFromDemoApplication() {
         DemoApplication demoApp = DemoApplication.getInstance(userId); // Assuming getInstance() returns the instance

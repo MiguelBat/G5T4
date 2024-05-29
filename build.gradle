@@ -1,40 +1,46 @@
 plugins {
-	id 'java'
-	id 'org.springframework.boot' version '3.2.4'
-	id 'io.spring.dependency-management' version '1.1.4'
-	id 'org.graalvm.buildtools.native' version '0.9.28'
+    id 'java'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
+    id 'org.graalvm.buildtools.native' version '0.9.28'
 }
 
 group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '22'
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(22)
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 ext {
-	set('timefoldSolverVersion', "1.9.0")
+    set('timefoldSolverVersion', "1.9.0")
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'ai.timefold.solver:timefold-solver-spring-boot-starter'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	implementation 'mysql:mysql-connector-java:8.0.28'
-	 implementation 'com.toedter:jcalendar:1.4'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'ai.timefold.solver:timefold-solver-spring-boot-starter'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'mysql:mysql-connector-java:8.0.28'
+    implementation 'com.toedter:jcalendar:1.4'
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "ai.timefold.solver:timefold-solver-bom:${timefoldSolverVersion}"
-	}
+    imports {
+        mavenBom "ai.timefold.solver:timefold-solver-bom:${timefoldSolverVersion}"
+    }
 }
 
 tasks.named('test') {
-	useJUnitPlatform()
+    useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.release.set(22)
 }

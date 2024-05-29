@@ -203,7 +203,7 @@ public class DemoApplication implements DarkModeListener {
         contentPanel.revalidate();
 
         // Create a new instance of CalendarPanel
-        CalendarPanel calendarPanel = new CalendarPanel();
+        CalendarPanel calendarPanel = new CalendarPanel(userId);
         contentPanel.add(calendarPanel, BorderLayout.CENTER);
 
         // Apply dark/light mode colors to the calendar panel, top panel, and sidebar
