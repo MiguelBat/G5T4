@@ -139,6 +139,11 @@ public class CalendarPanel extends JPanel {
                 openModifyDayDialog(userId, eventID);
             });
             detailsButton.addActionListener(evt -> {
+
+                int eventID = getEventIDForDateAndTitle(date, event); // Implement this method
+            
+                    // Open DeleteDayDialog passing the userId and eventID
+                    openDetailsDialog(userId, eventID);
             
             });
             eventRow.add(deleteButton);
@@ -186,7 +191,6 @@ public class CalendarPanel extends JPanel {
 
     
     private void openDeleteDayDialog(int userId, int eventID) {
-        System.out.println("Opening DeleteDayDialog with userId: " + userId + ", eventID: " + eventID);
         DeleteDayDialog deleteDayDialog = new DeleteDayDialog(userId, eventID);
         deleteDayDialog.setLocationRelativeTo(this); // Center the dialog relative to the calendar panel
         deleteDayDialog.setModal(true); // set deleteDayDialog to modal
@@ -198,6 +202,13 @@ public class CalendarPanel extends JPanel {
         modifyEventDialog.setLocationRelativeTo(this);
         modifyEventDialog.setModal(true);
         modifyEventDialog.setVisible(true);
+    }
+
+    private void openDetailsDialog(int userId, int eventID){
+        DetailsDayDialog detailsEventDialog = new DetailsDayDialog(eventID, userId);
+        detailsEventDialog.setLocationRelativeTo(this);
+        detailsEventDialog.setModal(true);
+        detailsEventDialog.setVisible(true);
     }
     
 }

@@ -1,19 +1,22 @@
 package com.example.demo;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-
-import javax.swing.*;
-import java.awt.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import javax.sql.DataSource;
 
 
 
@@ -131,27 +134,21 @@ public class DemoApplication implements DarkModeListener {
         sidebarPanel.setBackground(Color.WHITE);
         sidebarPanel.setPreferredSize(new Dimension(200, frame.getHeight()));
 
-        JLabel usernameLabel = new JLabel("Username");
-        usernameLabel.setHorizontalAlignment(SwingConstants.CENTER); // Center align the username
-        sidebarPanel.add(usernameLabel, BorderLayout.NORTH);
-
         // Add buttons to the sidebar
         JButton button1 = new JButton("HomePage");
-        JButton button2 = new JButton("Trabalhos");
         JButton button3 = new JButton("Chat");
         JButton button4 = new JButton("Calendario");
         JButton button5 = new JButton("Definições");
 
         // Add action listeners to the buttons
-        button1.addActionListener(e -> switchContent(frame, "Content1.java"));
-        button2.addActionListener(e -> switchContent(frame, "Content2.java"));
+        button1.addActionListener(e -> openHomePage(frame)); // Change to HomePage.java
+        // butão 2 foi discartado
         button3.addActionListener(e -> switchContent(frame, "Content3.java"));
         button4.addActionListener(e -> openCalendar(frame));
         button5.addActionListener(e -> openSettingsDialog(frame));
 
         // Add buttons to the sidebar panel
         sidebarPanel.add(button1);
-        sidebarPanel.add(button2);
         sidebarPanel.add(button3);
         sidebarPanel.add(button4);
         sidebarPanel.add(button5);
@@ -163,6 +160,9 @@ public class DemoApplication implements DarkModeListener {
         // Create the content panel
         contentPanel = new JPanel(new BorderLayout());
         frame.add(contentPanel, BorderLayout.CENTER);
+
+        // Switch to the HomePage as the default content
+        switchContent(frame, "HomePage.java");
 
         // Display the window
         frame.setVisible(true);
@@ -193,78 +193,87 @@ public class DemoApplication implements DarkModeListener {
         // Create a new instance of SettingsDialog and pass the current dark mode state
         SettingsDialog settingsDialog = new SettingsDialog(currentDarkModeState, this);
         contentPanel.add(settingsDialog, BorderLayout.CENTER);
-
-        // Apply dark/light mode colors to the settings dialog, top panel, and calendar
     }
 
-    private void openCalendar(JFrame parent) {
+    private void openHomePage(JFrame parent) {
         // Clear existing content
         contentPanel.removeAll();
         contentPanel.revalidate();
+        contentPanel.repaint();
 
-        // Create a new instance of CalendarPanel
-        CalendarPanel calendarPanel = new CalendarPanel(userId);
-        contentPanel.add(calendarPanel, BorderLayout.CENTER);
-
-        // Apply dark/light mode colors to the calendar panel, top panel, and sidebar
+        // Create a new instance of SettingsDialog and pass the current dark mode state
+        HomePage homepage = new HomePage(userId);
+        contentPanel.add(homepage, BorderLayout.CENTER);
     }
-
-    private void toggleSidebar(JFrame frame) {
-        sidebarOpen = !sidebarOpen;
-        sidebarPanel.setVisible(sidebarOpen);
-    }
-
-    private void switchContent(JFrame frame, String contentFile) {
-        // Load and display content from the specified file
-        // Implement this method based on your project structure
-        // For simplicity, we're not including the implementation here
-    }
-
-    @Override
-    public void darkModeToggled(boolean darkModeEnabled) {
-        currentDarkModeState = darkModeEnabled;
-        if (darkModeEnabled) {
-            applyDarkModeColors(sidebarPanel, contentPanel);
-        } else {
-            applyLightModeColors(sidebarPanel, contentPanel);
+        // Apply dark/light mode colors to the settings dialog, top
+        private void openCalendar(JFrame parent) {
+            // Clear existing content
+            contentPanel.removeAll();
+            contentPanel.revalidate();
+        
+            // Create a new instance of CalendarPanel
+            CalendarPanel calendarPanel = new CalendarPanel(userId);
+            contentPanel.add(calendarPanel, BorderLayout.CENTER);
+        
+            // Apply dark/light mode colors to the calendar panel, top panel, and sidebar
         }
-    }
-
-    // Method to apply dark mode colors to the components
-    private void applyDarkModeColors(Component... components) {
-        for (Component component : components) {
-            if (component instanceof JComponent) {
-                JComponent jComponent = (JComponent) component;
-                jComponent.setBackground(Color.DARK_GRAY);
-                jComponent.setForeground(Color.WHITE);
+        
+        private void toggleSidebar(JFrame frame) {
+            sidebarOpen = !sidebarOpen;
+            sidebarPanel.setVisible(sidebarOpen);
+        }
+        
+        private void switchContent(JFrame frame, String contentFile) {
+            // Load and display content from the specified file
+            // Implement this method based on your project structure
+            // For simplicity, we're not including the implementation here
+        }
+        
+        @Override
+        public void darkModeToggled(boolean darkModeEnabled) {
+            currentDarkModeState = darkModeEnabled;
+            if (darkModeEnabled) {
+                applyDarkModeColors(sidebarPanel, contentPanel);
+            } else {
+                applyLightModeColors(sidebarPanel, contentPanel);
             }
         }
-        // Apply dark mode color to top panel
-        if (sidebarPanel != null) {
-            sidebarPanel.setBackground(Color.DARK_GRAY);
-        }
-        // Apply dark mode color to sidebar
-        if (contentPanel != null) {
-            contentPanel.setBackground(Color.DARK_GRAY);
-        }
-    }
-
-    // Method to apply light mode colors to the components
-    private void applyLightModeColors(Component... components) {
-        for (Component component : components) {
-            if (component instanceof JComponent) {
-                JComponent jComponent = (JComponent) component;
-                jComponent.setBackground(Color.WHITE);
-                jComponent.setForeground(Color.BLACK);
+        
+        // Method to apply dark mode colors to the components
+        private void applyDarkModeColors(Component... components) {
+            for (Component component : components) {
+                if (component instanceof JComponent) {
+                    JComponent jComponent = (JComponent) component;
+                    jComponent.setBackground(Color.DARK_GRAY);
+                    jComponent.setForeground(Color.WHITE);
+                }
+            }
+            // Apply dark mode color to top panel
+            if (sidebarPanel != null) {
+                sidebarPanel.setBackground(Color.DARK_GRAY);
+            }
+            // Apply dark mode color to sidebar
+            if (contentPanel != null) {
+                contentPanel.setBackground(Color.DARK_GRAY);
             }
         }
-        // Apply light mode color to top panel
-        if (sidebarPanel != null) {
-            sidebarPanel.setBackground(Color.WHITE);
+        
+        // Method to apply light mode colors to the components
+        private void applyLightModeColors(Component... components) {
+            for (Component component : components) {
+                if (component instanceof JComponent) {
+                    JComponent jComponent = (JComponent) component;
+                    jComponent.setBackground(Color.WHITE);
+                    jComponent.setForeground(Color.BLACK);
+                }
+            }
+            // Apply light mode color to top panel
+            if (sidebarPanel != null) {
+                sidebarPanel.setBackground(Color.WHITE);
+            }
+            // Apply light mode color to sidebar
+            if (contentPanel != null) {
+                contentPanel.setBackground(Color.WHITE);
+            }
         }
-        // Apply light mode color to sidebar
-        if (contentPanel != null) {
-            contentPanel.setBackground(Color.WHITE);
-        }
-    }
-}
+    }        
