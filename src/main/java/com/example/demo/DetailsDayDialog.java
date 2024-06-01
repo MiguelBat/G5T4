@@ -22,7 +22,7 @@ public class DetailsDayDialog extends JDialog {
     public DetailsDayDialog(int eventID, int userId) {
         this.eventID = eventID;
 
-        setTitle("Event Details");
+        setTitle("Detalhes para envento");
         setSize(400, 300);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -40,7 +40,7 @@ public class DetailsDayDialog extends JDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        panel.add(new JLabel("Title:"), gbc);
+        panel.add(new JLabel("Titulo:"), gbc);
         
         titleLabel = new JLabel();
         gbc.gridx = 1;
@@ -48,7 +48,7 @@ public class DetailsDayDialog extends JDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        panel.add(new JLabel("Start Date:"), gbc);
+        panel.add(new JLabel("Data de inicio"), gbc);
         
         startDateLabel = new JLabel();
         gbc.gridx = 1;
@@ -56,7 +56,7 @@ public class DetailsDayDialog extends JDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        panel.add(new JLabel("End Date:"), gbc);
+        panel.add(new JLabel("Data fim"), gbc);
         
         endDateLabel = new JLabel();
         gbc.gridx = 1;
@@ -64,7 +64,7 @@ public class DetailsDayDialog extends JDialog {
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        panel.add(new JLabel("Details:"), gbc);
+        panel.add(new JLabel("Detalhes"), gbc);
         
         detailsLabel = new JLabel();
         gbc.gridx = 1;

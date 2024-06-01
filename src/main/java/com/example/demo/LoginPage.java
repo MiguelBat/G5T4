@@ -1,10 +1,19 @@
 package com.example.demo;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class LoginPage extends JPanel {
 
@@ -17,8 +26,8 @@ public class LoginPage extends JPanel {
         usernameField = new JTextField(20);
         passwordField = new JPasswordField(20);
         rememberMeCheckBox = new JCheckBox("Remember Me");
-        JButton loginButton = new JButton("Login");
-        JButton createAccountButton = new JButton("Create Account"); // Add create account button
+        JButton loginButton = new JButton("Entrar");
+        JButton createAccountButton = new JButton("Criar conta"); // Add create account button
 
         // Preload saved credentials if available
         loadSavedCredentials();
@@ -71,7 +80,7 @@ public class LoginPage extends JPanel {
 
         // Add components to the panel
         setLayout(new GridLayout(5, 2)); // Increase grid rows to accommodate the new checkbox
-        add(new JLabel("Username:"));
+        add(new JLabel("Utilizador:"));
         add(usernameField);
         add(new JLabel("Password:"));
         add(passwordField);

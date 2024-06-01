@@ -8,7 +8,6 @@ import java.time.format.DateTimeFormatter;
 
 
 public class CreateAccountDB {
-// TODO: Right now there's no verification to make sure there's no username, email duplication
     public boolean createAccount(String email, String username, String password) {
         // Get the current date and time
         LocalDateTime now = LocalDateTime.now();

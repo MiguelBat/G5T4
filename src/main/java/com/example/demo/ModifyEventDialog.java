@@ -1,11 +1,22 @@
 package com.example.demo;
 
-import com.toedter.calendar.JDateChooser;
-
-import javax.swing.*;
-import java.awt.*;
-import java.sql.*;
+import java.awt.GridLayout;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import com.toedter.calendar.JDateChooser;
 
 public class ModifyEventDialog extends JDialog {
 
@@ -18,7 +29,7 @@ public class ModifyEventDialog extends JDialog {
     public ModifyEventDialog(int userId, int eventID) {
         this.eventID = eventID;
 
-        setTitle("Modify Event");
+        setTitle("Alterar Evento");
         setSize(400, 300);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -30,23 +41,23 @@ public class ModifyEventDialog extends JDialog {
     private void initComponents() {
         JPanel panel = new JPanel(new GridLayout(5, 2));
 
-        panel.add(new JLabel("Title:"));
+        panel.add(new JLabel("Titulo"));
         titleField = new JTextField();
         panel.add(titleField);
 
-        panel.add(new JLabel("Start Date:"));
+        panel.add(new JLabel("Data Inicio:"));
         startDateChooser = new JDateChooser();
         panel.add(startDateChooser);
 
-        panel.add(new JLabel("End Date:"));
+        panel.add(new JLabel("Data fim:"));
         endDateChooser = new JDateChooser();
         panel.add(endDateChooser);
 
-        panel.add(new JLabel("Details:"));
+        panel.add(new JLabel("Detalhes"));
         detailsArea = new JTextArea();
         panel.add(new JScrollPane(detailsArea));
 
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton("Guardar");
         saveButton.addActionListener(e -> saveEventData());
         panel.add(saveButton);
 

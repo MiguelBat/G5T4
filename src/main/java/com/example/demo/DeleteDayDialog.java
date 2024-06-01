@@ -1,12 +1,17 @@
 package com.example.demo;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class DeleteDayDialog extends JDialog {
 
@@ -17,7 +22,7 @@ public class DeleteDayDialog extends JDialog {
         this.userId = userId;
         this.eventID = eventID;
 
-        setTitle("Delete Event");
+        setTitle("Apagar Evento");
         setSize(300, 150);
         setResizable(false);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -28,11 +33,11 @@ public class DeleteDayDialog extends JDialog {
     private void initComponents() {
         JPanel panel = new JPanel(new GridLayout(2, 1));
 
-        JLabel confirmationLabel = new JLabel("Are you sure you want to delete this event?");
+        JLabel confirmationLabel = new JLabel("Tem a certeza que quer apagar? esta ação é irreversivel");
         confirmationLabel.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(confirmationLabel);
 
-        JButton deleteButton = new JButton("Delete");
+        JButton deleteButton = new JButton("Apagar");
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

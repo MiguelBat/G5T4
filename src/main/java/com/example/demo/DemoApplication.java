@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -132,26 +134,47 @@ public class DemoApplication implements DarkModeListener {
         // Create the sidebar
         sidebarPanel = new JPanel();
         sidebarPanel.setBackground(Color.WHITE);
-        sidebarPanel.setPreferredSize(new Dimension(200, frame.getHeight()));
+        sidebarPanel.setPreferredSize(new Dimension(150, frame.getHeight())); // Adjust width
+        sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.Y_AXIS)); // Use BoxLayout for vertical alignment
 
         // Add buttons to the sidebar
         JButton button1 = new JButton("HomePage");
         JButton button3 = new JButton("Chat");
+        JButton button2 = new JButton("Tarefas");
         JButton button4 = new JButton("Calendario");
         JButton button5 = new JButton("Definições");
 
+        // Set maximum size for buttons to not occupy the full width
+        Dimension buttonSize = new Dimension(150, 30);
+        button1.setMaximumSize(buttonSize);
+        button2.setMaximumSize(buttonSize);
+        button3.setMaximumSize(buttonSize);
+        button4.setMaximumSize(buttonSize);
+        button5.setMaximumSize(buttonSize);
+
+        // Center align the buttons
+        button1.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button3.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button4.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button5.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         // Add action listeners to the buttons
-        button1.addActionListener(e -> openHomePage(frame)); // Change to HomePage.java
-        // butão 2 foi discartado
-        button3.addActionListener(e -> switchContent(frame, "Content3.java"));
+        button1.addActionListener(e -> openHomePage(frame));
+        button2.addActionListener(e -> openTarefas(frame));
+        button3.addActionListener(e -> openChat(frame));
         button4.addActionListener(e -> openCalendar(frame));
         button5.addActionListener(e -> openSettingsDialog(frame));
 
         // Add buttons to the sidebar panel
         sidebarPanel.add(button1);
+        sidebarPanel.add(button2);
         sidebarPanel.add(button3);
         sidebarPanel.add(button4);
         sidebarPanel.add(button5);
+
+        // Add glue to push the buttons to the top
+        sidebarPanel.add(Box.createVerticalGlue());
 
         // Add the sidebar panel to the frame, initially hidden
         frame.getContentPane().add(sidebarPanel, BorderLayout.WEST);
@@ -161,12 +184,13 @@ public class DemoApplication implements DarkModeListener {
         contentPanel = new JPanel(new BorderLayout());
         frame.add(contentPanel, BorderLayout.CENTER);
 
-        // Switch to the HomePage as the default content
-        switchContent(frame, "HomePage.java");
+        // Open HomePage.java on startup
+        openHomePage(frame);
 
         // Display the window
         frame.setVisible(true);
     }
+    
 
     private void openLoginPage() {
         JFrame loginFrame = new JFrame("Login Page");
@@ -204,6 +228,29 @@ public class DemoApplication implements DarkModeListener {
         // Create a new instance of SettingsDialog and pass the current dark mode state
         HomePage homepage = new HomePage(userId);
         contentPanel.add(homepage, BorderLayout.CENTER);
+    }
+
+    
+    private void openTarefas(JFrame parent) {
+        // Clear existing content
+        contentPanel.removeAll();
+        contentPanel.revalidate();
+        contentPanel.repaint();
+
+        // Create a new instance of SettingsDialog and pass the current dark mode state
+        Tarefas tarefas = new Tarefas(userId);
+        contentPanel.add(tarefas, BorderLayout.CENTER);
+    }
+
+    private void openChat(JFrame parent) {
+        // Clear existing content
+        contentPanel.removeAll();
+        contentPanel.revalidate();
+        contentPanel.repaint();
+
+        // Create a new instance of SettingsDialog and pass the current dark mode state
+        Chatpage chatpage = new Chatpage(userId);
+        contentPanel.add(chatpage, BorderLayout.CENTER);
     }
         // Apply dark/light mode colors to the settings dialog, top
         private void openCalendar(JFrame parent) {

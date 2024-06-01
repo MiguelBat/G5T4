@@ -57,7 +57,7 @@ public class CalendarPanel extends JPanel {
     
         // Create calendar panel to display days
         JPanel daysPanel = new JPanel(new GridLayout(0, 7));
-        String[] daysOfWeek = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+        String[] daysOfWeek = {"Dom", "Seg", "Ter", "Qua", "Qui", "Sei", "Sab"};
         for (String day : daysOfWeek) {
             daysPanel.add(new JLabel(day, SwingConstants.CENTER));
         }
@@ -114,18 +114,18 @@ public class CalendarPanel extends JPanel {
     
     private void displayEventsForDay(LocalDate date) {
         List<String> events = getEventsForDay(date);
-        JPanel eventPanel = new JPanel(new GridLayout(events.size() + 2, 1)); // +2 for the Add Event button and Details button
+        JPanel eventPanel = new JPanel(new GridLayout(events.size() + 2, 1)); 
         for (String event : events) {
             JPanel eventRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
             eventRow.add(new JLabel(event));
-            JButton deleteButton = new JButton("Delete");
-            JButton modifyButton = new JButton("Modify");
-            JButton detailsButton = new JButton("Details");
+            JButton deleteButton = new JButton("Apagar");
+            JButton modifyButton = new JButton("Modificar");
+            JButton detailsButton = new JButton("Detalhes");
             deleteButton.addActionListener(evt -> {
-                int choice = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this event?");
+                int choice = JOptionPane.showConfirmDialog(this, "Tem a certeza que quer apagar este evento?");
                 if (choice == JOptionPane.YES_OPTION) {
                     // Get the ID of the event from the Calendario table
-                    int eventID = getEventIDForDateAndTitle(date, event); // Implement this method
+                    int eventID = getEventIDForDateAndTitle(date, event); 
             
                     // Open DeleteDayDialog passing the userId and eventID
                     openDeleteDayDialog(userId, eventID);
@@ -151,13 +151,13 @@ public class CalendarPanel extends JPanel {
             eventRow.add(detailsButton);
             eventPanel.add(eventRow);
         }
-        JButton addEventButton = new JButton("Add Event");
+        JButton addEventButton = new JButton("Adicionar evento");
         addEventButton.addActionListener(evt -> {
             openEditDayDialog(date);
         });
         eventPanel.add(addEventButton);
     
-        JOptionPane.showMessageDialog(this, eventPanel, "Events for " + date, JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this, eventPanel, "Eventos para" + date, JOptionPane.PLAIN_MESSAGE);
     }
 
     private void openEditDayDialog(LocalDate date) {

@@ -26,7 +26,7 @@ public class EditDayDialog extends JDialog {
     public EditDayDialog(LocalDate selectedDate, int userId) {
         this.userId = userId;
 
-        setTitle("Edit Day");
+        setTitle("Editar evento");
         setSize(400, 400); // Increased size to accommodate all components
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Close only this dialog
         setLocationRelativeTo(null); // Center the dialog on the screen
@@ -38,28 +38,28 @@ public class EditDayDialog extends JDialog {
         // Start date picker
         startDateChooser = new JDateChooser();
         startDateChooser.setDate(java.sql.Date.valueOf(selectedDate));
-        panel.add(new JLabel("Start Date:"));
+        panel.add(new JLabel("Data de inicio:"));
         panel.add(startDateChooser);
 
         // End date picker
         endDateChooser = new JDateChooser();
-        panel.add(new JLabel("End Date:"));
+        panel.add(new JLabel("Data do fim:"));
         panel.add(endDateChooser);
 
         // Title field
-        panel.add(new JLabel("Title:"));
+        panel.add(new JLabel("Titulo:"));
         titleField = new JTextField();
         panel.add(titleField);
 
         // Details area
-        panel.add(new JLabel("Details:"));
+        panel.add(new JLabel("Detalhes:"));
         detailsArea = new JTextArea();
         detailsArea.setRows(5); // Set preferred size for details area
         JScrollPane scrollPane = new JScrollPane(detailsArea);
         panel.add(scrollPane);
 
         // Save button
-        JButton saveButton = new JButton("Save");
+        JButton saveButton = new JButton("Guardar");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -77,7 +77,7 @@ public class EditDayDialog extends JDialog {
     
         // Check if start date and end date choosers are not null
         if (startDateChooser.getDate() == null || endDateChooser.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Please select both start and end dates.");
+            JOptionPane.showMessageDialog(this, "Porfavor escolha as duas datas");
             return; // Exit the method if either date is not selected
         }
     
@@ -95,10 +95,10 @@ public class EditDayDialog extends JDialog {
                 statement.setDate(6, java.sql.Date.valueOf(endDate));
                 int rowsAffected = statement.executeUpdate();
                 if (rowsAffected > 0) {
-                    JOptionPane.showMessageDialog(this, "Event saved successfully.");
+                    JOptionPane.showMessageDialog(this, "Guardado");
                     dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Failed to save the event.");
+                    JOptionPane.showMessageDialog(this, "Erro");
                 }
             }
         } catch (SQLException e) {

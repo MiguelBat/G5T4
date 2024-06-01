@@ -35,10 +35,10 @@ public class CreateAccountPage extends JPanel {
                 // Handle account creation result
                 if (success) {
                     // Show success message
-                    JOptionPane.showMessageDialog(null, "Account created successfully.");
+                    JOptionPane.showMessageDialog(null, "Conta Criada com Successo");
                 } else {
                     // Show error message
-                    JOptionPane.showMessageDialog(null, "Failed to create account. Please try again.");
+                    JOptionPane.showMessageDialog(null, "Erro ao criar a conta por favor aguarde e tente novamente.");
                 }
             }
         });
