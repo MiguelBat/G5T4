@@ -11,12 +11,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Objects;
 
 // Import JDateChooser
 import com.toedter.calendar.JDateChooser;
 
 public class AddTarefa extends JDialog {
-    private int userId;
+    private final int userId;
     private JTextField tituloField;
     private JTextArea detalhesArea;
     private JComboBox<String> estadoComboBox;
@@ -122,16 +123,17 @@ public class AddTarefa extends JDialog {
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            if (selectedFile.exists()) {
+            if (selectedFile != null && selectedFile.exists()) {
                 nomemidiaField.setText(selectedFile.getAbsolutePath()); // Store absolute path
                 tipomidiaField.setText(getFileType(selectedFile));
             } else {
-                JOptionPane.showMessageDialog(this, "O arquivo selecionado não existe.", "Erro", JOptionPane.ERROR_MESSAGE);
+                nomemidiaField.setText(""); // Clear the file path
+                tipomidiaField.setText(""); // Clear the file type
+                JOptionPane.showMessageDialog(this, "Arquivo não selecionado.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
-    
-    
+
 
     private String getFileType(File file) {
         String fileName = file.getName();
@@ -147,32 +149,39 @@ public class AddTarefa extends JDialog {
         String titulo = tituloField.getText();
         String detalhes = detalhesArea.getText();
         String estado = estadoComboBox.getSelectedItem().toString();
-        LocalDate dataInicio = LocalDate.now(); // dataInicioPicker.getDate();
-        LocalDate dataFim = LocalDate.now(); // dataFimPicker.getDate();
+        LocalDate dataInicio = LocalDate.now();
+        LocalDate dataFim = LocalDate.now(); // dataFimPicker.getDate()
         String nomemidia = nomemidiaField.getText();
         String tipomidia = tipomidiaField.getText();
-
-        File selectedFile = new File(nomemidia);
-        if (!selectedFile.exists()) {
-            JOptionPane.showMessageDialog(this, "O arquivo selecionado não existe.", "Erro", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
+    
         // Insert into database
         try (Connection connection = new DatabaseConnection().getConnection()) {
-            String query = "INSERT INTO tarefas (IDautor, titulo, detalhes, estado, midia, nomemidia, tipomidia, datainicio, datafim) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query;
+            if (nomemidia != null && !nomemidia.isEmpty()) {
+                query = "INSERT INTO tarefas (IDautor, titulo, detalhes, estado, midia, nomemidia, tipomidia, datainicio, datafim) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            } else {
+                query = "INSERT INTO tarefas (IDautor, titulo, detalhes, estado, datainicio, datafim) VALUES (?, ?, ?, ?, ?, ?)";
+            }
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setInt(1, userId);
                 statement.setString(2, titulo);
                 statement.setString(3, detalhes);
                 statement.setString(4, estado);
-                // Set the midia field
-                FileInputStream fis = new FileInputStream(selectedFile);
-                statement.setBinaryStream(5, fis, (int) selectedFile.length());
-                statement.setString(6, nomemidia);
-                statement.setString(7, tipomidia);
-                statement.setDate(8, java.sql.Date.valueOf(dataInicio));
-                statement.setDate(9, java.sql.Date.valueOf(dataFim));
+                if (nomemidia != null && !nomemidia.isEmpty()) {
+                    File selectedFile = new File(nomemidia);
+                    if (selectedFile.exists()) {
+                        FileInputStream fis = new FileInputStream(selectedFile);
+                        statement.setBinaryStream(5, fis, (int) selectedFile.length());
+                        statement.setString(6, nomemidia);
+                        statement.setString(7, tipomidia);
+                        statement.setDate(8, java.sql.Date.valueOf(dataInicio));
+                        statement.setDate(9, java.sql.Date.valueOf(dataFim));
+                    }
+                } else {
+                    // No media file provided, set only the remaining parameters
+                    statement.setDate(5, java.sql.Date.valueOf(dataInicio));
+                    statement.setDate(6, java.sql.Date.valueOf(dataFim));
+                }
                 statement.executeUpdate();
                 JOptionPane.showMessageDialog(this, "Tarefa adicionada com sucesso!");
                 dispose(); // Close the dialog after successful addition
@@ -182,4 +191,6 @@ public class AddTarefa extends JDialog {
             JOptionPane.showMessageDialog(this, "Erro ao adicionar tarefa. Por favor, tente novamente.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
+    
+    
 }

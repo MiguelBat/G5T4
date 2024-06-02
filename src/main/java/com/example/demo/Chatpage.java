@@ -297,15 +297,15 @@ public class Chatpage extends JPanel {
                 private String[] getEventDetailsFromDatabase(String eventTitle) {
                     String[] eventDetails = new String[4]; // Array para armazenar os detalhes do evento
                     try (Connection connection = new DatabaseConnection().getConnection()) {
-                        String query = "SELECT DataInicio, DataFim, Detalhes FROM eventos WHERE Titulo = ?";
+                        String query = "SELECT Data, datafim, Detalhes FROM calendario WHERE Titulo = ?";
                         try (PreparedStatement statement = connection.prepareStatement(query)) {
                             statement.setString(1, eventTitle);
                             try (ResultSet resultSet = statement.executeQuery()) {
                                 if (resultSet.next()) {
                                     // Recuperar os detalhes do evento do resultado da consulta
                                     eventDetails[0] = eventTitle; // Título do evento
-                                    eventDetails[1] = resultSet.getString("DataInicio"); // Data de início do evento
-                                    eventDetails[2] = resultSet.getString("DataFim"); // Data de término do evento
+                                    eventDetails[1] = resultSet.getString("Data"); // Data de início do evento
+                                    eventDetails[2] = resultSet.getString("datafim"); // Data de término do eventor
                                     eventDetails[3] = resultSet.getString("Detalhes"); // Detalhes do evento
                                 }
                             }
@@ -322,7 +322,7 @@ public class Chatpage extends JPanel {
                     // Implemente a lógica para recuperar todos os eventos do banco de dados
                     List<String> events = new ArrayList<>();
                     try (Connection connection = new DatabaseConnection().getConnection()) {
-                        String query = "SELECT Titulo FROM eventos";
+                        String query = "SELECT Titulo FROM calendario";
                         try (PreparedStatement statement = connection.prepareStatement(query);
                              ResultSet resultSet = statement.executeQuery()) {
                             while (resultSet.next()) {

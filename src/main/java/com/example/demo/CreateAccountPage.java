@@ -1,9 +1,17 @@
 package com.example.demo;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class CreateAccountPage extends JPanel {
 
@@ -35,10 +43,13 @@ public class CreateAccountPage extends JPanel {
                 // Handle account creation result
                 if (success) {
                     // Show success message
-                    JOptionPane.showMessageDialog(null, "Conta Criada com Successo");
+                    JOptionPane.showMessageDialog(null, "Conta Criada com Sucesso");
+
+                    // Switch to the login page
+                    switchToLoginPage();
                 } else {
                     // Show error message
-                    JOptionPane.showMessageDialog(null, "Erro ao criar a conta por favor aguarde e tente novamente.");
+                    JOptionPane.showMessageDialog(null, "Erro ao criar a conta. Por favor, aguarde e tente novamente.");
                 }
             }
         });
@@ -47,12 +58,19 @@ public class CreateAccountPage extends JPanel {
         setLayout(new GridLayout(4, 2)); // Increase grid rows to accommodate the new button
         add(new JLabel("Email:"));
         add(emailField);
-        add(new JLabel("Username:"));
+        add(new JLabel("Utilizador:"));
         add(usernameField);
         add(new JLabel("Password:"));
         add(passwordField);
         add(new JPanel()); // Empty panel for spacing
         add(createAccountButton); // Add the create account button
     }
-}
 
+    private void switchToLoginPage() {
+        JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(new LoginPage());
+        frame.revalidate();
+        frame.repaint();
+    }
+}
